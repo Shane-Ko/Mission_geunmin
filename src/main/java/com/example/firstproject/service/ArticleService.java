@@ -1,6 +1,7 @@
 package com.example.firstproject.service;
 
 import com.example.firstproject.dto.ArticleDto;
+import com.example.firstproject.dto.BoardDto;
 import com.example.firstproject.entity.Article;
 import com.example.firstproject.entity.Board;
 import com.example.firstproject.repository.ArticleRepository;
@@ -8,6 +9,8 @@ import com.example.firstproject.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -65,13 +68,22 @@ public class ArticleService {
 
     // 게시글 삭제
     public void delete(Long id) {
-        articleRepository.deleteById(id);
-    }
+        articleRepository.delete(articleRepository.findById(id).orElseThrow());
 
+    }
 
     //비밀번호 검증
     public boolean checkingPassword(Long id, String password) {
         Article article = articleRepository.findById(id).orElseThrow();
         return article.getPassword().equals(password);
     }
+
+    //articleid로 boardid 가져오기
+    public Long findBoardByArticle(Long id) {
+        return boardRepository.findBoardByArticleListId(id).getId();
+    }
+
+
+
+
 }

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -94,13 +95,16 @@ public class ArticleController {
         return "article/delete";
     }
 
-    @PostMapping("/{id}/delete-article")
-    public String deleteArticle(@PathVariable("id") Long id,Model model) {
-        model.addAttribute(boardService.read(id));
-        articleService.delete(id);
-        return "redirect:/boards/{id}";
-    }
+    @PostMapping("/{id}/delete-article")    //id = article id
+    public String deleteArticle(@PathVariable("id") Long articleId, Model model) {
 
+        Long foundBoard = articleService.findBoardByArticle(articleId);
+        articleService.delete(articleId);
+//        redirectAttributes.addAttribute("boardId",foundBoard);
+        model.addAttribute("boardId",foundBoard);
+
+        return "redirect:/boards/{boardId}";    //id = board id
+    }
 
     // #. 비밀번호가 틀렸을 시
     @GetMapping("/{id}/password-incorrect")
@@ -108,10 +112,12 @@ public class ArticleController {
         model.addAttribute("article",articleService.read(id));
         return "article/incorrect";
     }
-    @PostMapping("/{id}/update-article/incorrect")
+    @PostMapping("/{id}/update-article/incorrect")  //id = article id
     public String incorrectError(@PathVariable("id")Long id, Model model) {
+        // back 태그에서 사용
         model.addAttribute("article",articleService.read(id));
-        return "redirect:/article/{id}";
+
+        return "redirect:/article/{id}";    //id = article id
     }
 
 

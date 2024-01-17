@@ -24,8 +24,8 @@ public class BoardController {
     }
 
 
-    @GetMapping("{id}")
-    public String readBoard(@PathVariable("id") Long id, Model model) {
+    @GetMapping("{boardId}")
+    public String readBoard(@PathVariable("boardId") Long id, Model model) {
         model.addAttribute("board", boardService.read(id));
         model.addAttribute("articles", boardService.readByBoardId(id));
         return "board/board";
@@ -37,4 +37,5 @@ public class BoardController {
         model.addAttribute("articles", boardService.readAll());
         return "board/entireBoard";
     }
+
 }
